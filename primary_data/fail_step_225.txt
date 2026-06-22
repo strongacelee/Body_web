@@ -1,0 +1,167 @@
+Created At: 2026-06-13T05:50:50Z
+Completed At: 2026-06-13T05:50:50Z
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+import os
+import json
+import cv2
+import numpy as np
+import mediapipe as mp
+
+# 미디어파이프 Pose 모델 초기화
+mp_pose = mp.solutions.pose
+
+def extract_landmarks_pixels(image_path):
+    """
+    이미지 파일에서 실제 미디어파이프 랜드마크 픽셀 좌표를 검출하여 딕셔너리로 반환합니다.
+    {point_id: [x, y, z]}
+    """
+    img = cv2.imread(image_path)
+    if img is None:
+        return None
+    h, w = img.shape[:2]
+    img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    
+    with mp_pose.Pose(static_image_mode=True, min_detection_confidence=0.5) as pose:
+        results = pose.process(img_rgb)
+        
+    if results.pose_landmarks is None:
+        print(f"Warning: 랜드마크 검출 실패: {image_path}")
+        return None
+        
+    lms = {}
+    for i, lm in enumerate(results.pose_landmarks.landmark):
+        lms[i] = [lm.x * w, lm.y * h, lm.z]
+    return lms
+
+def refine_and_crop(image_path, crop_box, target_size, placement_box, dest_name=None, force_stretch=False, lms_dict=None):
+    """
+    이미지를 읽어와서 검은색 배경을 완전 투명화하고,
+    crop_box (x1, y1, x2, y2) 영역을 크롭한 뒤,
+    target_size (w, h) 캔버스의 placement_box (px1, py1, px2, py2)에 맞춰 리사이즈 및 배치합니다.
+    force_stretch가 True일 경우 원본 비율과 상관없이 박스 크기에 꽉 채워(Stretch) 리사이즈합니다.
+    lms_dict가 주
+<truncated 10496 bytes>
+ry_organ", (800, 1000), (260, 185, 540, 335), "respiratory.png", False),
+        ("excretory", "excretory_organ", (800, 1000), (260, 405, 540, 605), "excretory.png", False),
+        
+        # 가이드 및 샘플 모델
+        ("guide", "full", (800, 1200), (0, 0, 800, 1200), "pose_guide.png", True),
+        ("sample", "full", (800, 1200), (0, 0, 800, 1200), "sample_model.png", True)
+    ]
+    
+    asset_landmarks_db = {}
+    
+    for src_key, crop_key, target_size, placement_box, dest_name, stretch in configs:
+        src_path = raw_images[src_key]
+        crop_box = crop_areas[crop_key] if crop_key in crop_areas else (0, 0, 1024, 1024)
+        
+        lms_in = source_landmarks.get(src_key)
+        
+        print(f"가공 중: {src_key}({crop_key}) -> {dest_name}")
+        refined, trans_lms = refine_and_crop(src_path, crop_box, target_size, placement_box, dest_name, force_stretch=stretch, lms_dict=lms_in)
+        if refined is not None:
+            dest_path = os.path.join(dest_dir, dest_name)
+            cv2.imwrite(dest_path, refined)
+            print(f"가공 완료: {dest_path}")
+            
+            # 최종 정제 에셋별로 랜드마크 기록 저장
+            if trans_lms:
+                # 파일명을 key로 저장 (예: skeleton_head.png)
+                asset_landmarks_db[dest_name] = trans_lms
+        else:
+            print(f"Error: {dest_name} 가공 실패")
+            
+    # 최종적으로 정밀 랜드마크 DB를 JSON 파일로 저장
+    db_path = os.path.join(dest_dir, "asset_landmarks.json")
+    with open(db_path, "w", encoding="utf-8") as f:
+        json.dump(asset_landmarks_db, f, indent=4)
+    print(f"에셋 랜드마크 데이터베이스 구축 성공: {db_path}")
+
+if __name__ == "__main__":
+    main()
+
+The above content shows the entire, complete file contents of the requested file.
+
+Created At: 2026-06-13T05:50:50Z
+Completed At: 2026-06-13T05:50:50Z
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+import os
+import json
+import cv2
+import numpy as np
+import mediapipe as mp
+
+# 미디어파이프 Pose 모델 초기화
+mp_pose = mp.solutions.pose
+
+def extract_landmarks_pixels(image_path):
+    """
+    이미지 파일에서 실제 미디어파이프 랜드마크 픽셀 좌표를 검출하여 딕셔너리로 반환합니다.
+    {point_id: [x, y, z]}
+    """
+    img = cv2.imread(image_path)
+    if img is None:
+        return None
+    h, w = img.shape[:2]
+    img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    
+    with mp_pose.Pose(static_image_mode=True, min_detection_confidence=0.5) as pose:
+        results = pose.process(img_rgb)
+        
+    if results.pose_landmarks is None:
+        print(f"Warning: 랜드마크 검출 실패: {image_path}")
+        return None
+        
+    lms = {}
+    for i, lm in enumerate(results.pose_landmarks.landmark):
+        lms[i] = [lm.x * w, lm.y * h, lm.z]
+    return lms
+
+def refine_and_crop(image_path, crop_box, target_size, placement_box, dest_name=None, force_stretch=False, lms_dict=None):
+    """
+    이미지를 읽어와서 검은색 배경을 완전 투명화하고,
+    crop_box (x1, y1, x2, y2) 영역을 크롭한 뒤,
+    target_size (w, h) 캔버스의 placement_box (px1, py1, px2, py2)에 맞춰 리사이즈 및 배치합니다.
+    force_stretch가 True일 경우 원본 비율과 상관없이 박스 크기에 꽉 채워(Stretch) 리사이즈합니다.
+    lms_dict가 주
+<truncated 10496 bytes>
+ry_organ", (800, 1000), (260, 185, 540, 335), "respiratory.png", False),
+        ("excretory", "excretory_organ", (800, 1000), (260, 405, 540, 605), "excretory.png", False),
+        
+        # 가이드 및 샘플 모델
+        ("guide", "full", (800, 1200), (0, 0, 800, 1200), "pose_guide.png", True),
+        ("sample", "full", (800, 1200), (0, 0, 800, 1200), "sample_model.png", True)
+    ]
+    
+    asset_landmarks_db = {}
+    
+    for src_key, crop_key, target_size, placement_box, dest_name, stretch in configs:
+        src_path = raw_images[src_key]
+        crop_box = crop_areas[crop_key] if crop_key in crop_areas else (0, 0, 1024, 1024)
+        
+        lms_in = source_landmarks.get(src_key)
+        
+        print(f"가공 중: {src_key}({crop_key}) -> {dest_name}")
+        refined, trans_lms = refine_and_crop(src_path, crop_box, target_size, placement_box, dest_name, force_stretch=stretch, lms_dict=lms_in)
+        if refined is not None:
+            dest_path = os.path.join(dest_dir, dest_name)
+            cv2.imwrite(dest_path, refined)
+            print(f"가공 완료: {dest_path}")
+            
+            # 최종 정제 에셋별로 랜드마크 기록 저장
+            if trans_lms:
+                # 파일명을 key로 저장 (예: skeleton_head.png)
+                asset_landmarks_db[dest_name] = trans_lms
+        else:
+            print(f"Error: {dest_name} 가공 실패")
+            
+    # 최종적으로 정밀 랜드마크 DB를 JSON 파일로 저장
+    db_path = os.path.join(dest_dir, "asset_landmarks.json")
+    with open(db_path, "w", encoding="utf-8") as f:
+        json.dump(asset_landmarks_db, f, indent=4)
+    print(f"에셋 랜드마크 데이터베이스 구축 성공: {db_path}")
+
+if __name__ == "__main__":
+    main()
+
+The above content shows the entire, complete file contents of the requested file.

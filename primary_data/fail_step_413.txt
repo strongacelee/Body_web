@@ -1,0 +1,25 @@
+Created At: 2026-06-13T06:14:16Z
+Completed At: 2026-06-13T06:14:16Z
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+# 신규 얼굴 모형 에셋 이식 및 정합 구현 태스크 목록
+
+* [x] 신규 얼굴 모형 에셋 가공 및 랜드마크 DB 구축
+  * [x] scripts/03_process_head_assets.py 신규 스크립트 작성 (배경 투명화 및 랜드마크 산출 로직)
+  * [x] scripts/03_process_head_assets.py 실행하여 primary_data 폴더에 머리 에셋 5종 저장 및 asset_landmarks.json 최신화
+  * [x] 갱신된 JSON 데이터베이스에서 각 머리 에셋(skeleton_head, nervous_head, muscles_head, circulatory_head, respiratory_head, digestive_head)의 0번부터 32번까지 랜드마크가 올바르게 들어갔는지 확인
+
+* [x] app.py 런타임 5대 기관계 머리 정합 엔진 리팩토링
+  * [x] ASSETS 경로에 circulatory_head, respiratory_head, digestive_head 에셋 경로 등록
+  * [x] get_hybrid_overlay_layer 내 머리 변환 조건에 circulatory, respiratory, digestive 를 포함하도록 수정
+  * [x] Streamlit 서버가 구문 에러 없이 정상 가동되는지 확인
+
+* [x] 브라우저 서브에이전트 검증 및 캡처
+  * [x] 샘플 모델 및 전신 사진 합성 뷰에서 순환계, 호흡계, 소화계 오버레이 가동 시 얼굴 부위에 붉은 혈관, 비강 조직 등이 정밀 정합되는지 확인
+  * [x] 얼굴 마스킹이나 보호막이 완전히 배제된 상태에서 5대 기관계 머리 에셋이 반투명하게 1대1 겹쳐서 오버레이되는지 최종 점검
+  * [x] 최종 검증 화면 캡처 및 visualizations/full_body_overlay_complete.png 갱신 저장
+
+* [x] 결과 보고 및 문서 최신화
+  * [x] walkthrough.md 에 신규 얼굴 모형 추가 내역 및 랜드마크 매핑 좌표 갱신
+  * [x] interim_reports/01_development_report.md 에 5대 기관계 머리 아핀 정합 확장 내역 정리
+
+The above content shows the entire, complete file contents of the requested file.

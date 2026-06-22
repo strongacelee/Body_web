@@ -1,0 +1,86 @@
+The USER performed the following action:
+Show the contents of file c:\Users\stron\Desktop\Antigrabity\7th_body\scripts\07_verify_final_synthesis.py from lines 1 to 39
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+import os
+import json
+import cv2
+import numpy as np
+
+def main():
+    print("최종 보정 랜드마크 기반 머리 합성 로컬 시각적 검증 시작")
+    
+    # 1. 파일 및 데이터베이스 로드
+    sample_path = "primary_data/sample_model.png"
+    db_path = "primary_data/asset_landmarks.json"
+    
+    if not os.path.exists(sample_path) or not os.path.exists(db_path):
+        print("Error: 샘플 모델 또는 랜드마크 DB 파일이 존재하지 않습니다.")
+        return
+        
+    sample_img = cv2.imread(sample_path)
+    h, w = sample_img.shape[:2]
+    
+    with open(db_path, "r", encoding="utf-8") as f:
+        landmarks_db = json.load(f)
+        
+    sample_lms = landmarks_db.get("sample_model.png", {})
+    if not sample_lms:
+        print("Error: sample_model 랜드마크 정보가 DB에 없습니다.")
+        return
+        
+    # sample_model의 안면 랜드마크 정보 (0: 코, 2: 왼눈, 5: 오른눈, 7: 왼귀, 8: 오른귀)
+    head_indices = [0, 2, 5, 7, 8]
+    dst_pts_list = []
+    for idx in head_indices:
+        pt = sample_lms[str(idx)]
+        dst_pts_list.append([pt[0], pt[1]])
+    dst_pts = np.float32(dst_pts_list)
+    
+    # 합성할 머리 에셋 리스트
+    head_assets = [
+        "skeleton_head.png",
+        "nervous_head.png",
+
+
+The USER performed the following action:
+Show the contents of file c:\Users\stron\Desktop\Antigrabity\7th_body\scripts\07_verify_final_synthesis.py from lines 1 to 39
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+import os
+import json
+import cv2
+import numpy as np
+
+def main():
+    print("최종 보정 랜드마크 기반 머리 합성 로컬 시각적 검증 시작")
+    
+    # 1. 파일 및 데이터베이스 로드
+    sample_path = "primary_data/sample_model.png"
+    db_path = "primary_data/asset_landmarks.json"
+    
+    if not os.path.exists(sample_path) or not os.path.exists(db_path):
+        print("Error: 샘플 모델 또는 랜드마크 DB 파일이 존재하지 않습니다.")
+        return
+        
+    sample_img = cv2.imread(sample_path)
+    h, w = sample_img.shape[:2]
+    
+    with open(db_path, "r", encoding="utf-8") as f:
+        landmarks_db = json.load(f)
+        
+    sample_lms = landmarks_db.get("sample_model.png", {})
+    if not sample_lms:
+        print("Error: sample_model 랜드마크 정보가 DB에 없습니다.")
+        return
+        
+    # sample_model의 안면 랜드마크 정보 (0: 코, 2: 왼눈, 5: 오른눈, 7: 왼귀, 8: 오른귀)
+    head_indices = [0, 2, 5, 7, 8]
+    dst_pts_list = []
+    for idx in head_indices:
+        pt = sample_lms[str(idx)]
+        dst_pts_list.append([pt[0], pt[1]])
+    dst_pts = np.float32(dst_pts_list)
+    
+    # 합성할 머리 에셋 리스트
+    head_assets = [
+        "skeleton_head.png",
+        "nervous_head.png",

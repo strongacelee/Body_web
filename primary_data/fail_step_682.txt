@@ -1,0 +1,81 @@
+Created At: 2026-06-13T11:01:32Z
+Completed At: 2026-06-13T11:01:32Z
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+    else:
+        scale_w = p_w / bw
+        scale_h = p_h / bh
+        scale = min(scale_w, scale_h)
+        
+        new_w = int(bw * scale)
+        new_h = int(bh * scale)
+        resized = cv2.resize(crop_tight, (new_w, new_h), interpolation=cv2.INTER_AREA)
+        
+        # 중앙 정렬
+        start_x = px1 + (p_w - new_w) // 2
+        start_y = py1 + (p_h - new_h) // 2
+    
+    # 출력 캔버스 생성
+    canvas = np.zeros((th, tw, 4), dtype=np.uint8)
+    canvas[start_y:start_y+new_h, start_x:start_x+new_w] = resized
+    
+    # 랜드마크 픽셀 좌표 추적 연산
+    transformed_lms = {}
+    if lms_dict is not None:
+        for pt_id, pt in lms_dict.items():
+            lx, ly, lz = pt
+            # 1. 크롭 오프셋 적용
+            x1 = lx - cx1
+            y1 = ly - cy1
+            # 2. 타이트 바운딩 박스 오프셋 적용
+            x2 = x1 - bx
+            y2 = y1 - by
+            # 3. 리사이즈 스케일 및 캔버스 오프셋 적용
+            if force_stretch:
+                x_final = (x2 * (p_w / bw)) + start_x
+                y_final = (y2 * (p_h / bh)) + start_y
+            else:
+                x_final = (x2 * scale) + start_x
+                y_final = (y2 * scale) + start_y
+            
+            # 크기 영역 제한 없이 모든 랜드마크를 가상 좌표로 기록 보존
+            transformed_lms[int(pt_id)] = [fl
+<truncated 6758 bytes>
+retory_organ", (800, 1000), (260, 405, 540, 605), "excretory.png", False),
+        
+        # 가이드 및 샘플 모델
+        ("guide", "full", (800, 1200), (0, 0, 800, 1200), "pose_guide.png", True),
+        ("sample", "full", (800, 1200), (0, 0, 800, 1200), "sample_model.png", True)
+    ]
+    
+    asset_landmarks_db = {}
+    
+    for src_key, crop_key, target_size, placement_box, dest_name, stretch in configs:
+        src_path = raw_images[src_key]
+        crop_box = crop_areas[crop_key] if crop_key in crop_areas else (0, 0, 1024, 1024)
+        
+        lms_in = source_landmarks.get(src_key)
+        
+        print(f"가공 중: {src_key}({crop_key}) -> {dest_name}")
+        refined, trans_lms = refine_and_crop(src_path, crop_box, target_size, placement_box, dest_name, force_stretch=stretch, lms_dict=lms_in)
+        if refined is not None:
+            dest_path = os.path.join(dest_dir, dest_name)
+            cv2.imwrite(dest_path, refined)
+            print(f"가공 완료: {dest_path}")
+            
+            # 최종 정제 에셋별로 랜드마크 기록 저장
+            if trans_lms:
+                # 파일명을 key로 저장 (예: skeleton_head.png)
+                asset_landmarks_db[dest_name] = trans_lms
+        else:
+            print(f"Error: {dest_name} 가공 실패")
+            
+    # 최종적으로 정밀 랜드마크 DB를 JSON 파일로 저장
+    db_path = os.path.join(dest_dir, "asset_landmarks.json")
+    with open(db_path, "w", encoding="utf-8") as f:
+        json.dump(asset_landmarks_db, f, indent=4)
+    print(f"에셋 랜드마크 데이터베이스 구축 성공: {db_path}")
+
+if __name__ == "__main__":
+    main()
+
+The above content does NOT show the entire file contents. If you need to view any lines of the file which were not shown to complete your task, call this tool again to view those lines.
