@@ -1,6 +1,5 @@
 streamlit
 mediapipe==0.10.14
-protobuf<4.0.0
 opencv-python-headless
 numpy<2.0.0
 Pillow
